@@ -1293,6 +1293,9 @@ function expand_steps()
                     plain)
                         runcmds="$runcmds `expand_steps instonly` proposal"
                     ;;
+                    setuponly)
+                        runcmds="$runcmds cleanup prepare setupadmin prepareinstcrowbar instcrowbar setupnodes"
+                    ;;
                     instonly)
                         runcmds="$runcmds cleanup prepare setupadmin prepareinstcrowbar instcrowbar setupnodes instnodes"
                     ;;
