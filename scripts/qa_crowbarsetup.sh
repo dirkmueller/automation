@@ -5256,26 +5256,6 @@ function onadmin_crowbar_nodeupgrade
     fi
 }
 
-function onadmin_qa_test
-{
-    pre_hook $FUNCNAME
-    $zypper in -y python-{keystone,nova,glance,heat,cinder,ceilometer}client
-
-    get_novacontroller
-    scp $novacontroller:.openrc ~/
-
-    if [ ! -d "qa-openstack-cli" ] ; then
-        complain 16 "Please provide a checkout of the qa-openstack-cli repo on the crowbar node."
-    fi
-
-    pushd qa-openstack-cli
-    mkdir -p ~/qa_test.logs
-    ./run.sh | perl -pe '$|=1;s/\e\[?.*?[\@-~]//g' | tee ~/qa_test.logs/run.sh.log
-    local ret=${PIPESTATUS[0]}
-    popd
-    return $ret
-}
-
 # Run cct tests
 # By default all tests specified in $cct_tests will be run + all functional tests
 # $cct_tests           -> mandatory, typical value is features:base

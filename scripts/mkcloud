@@ -825,26 +825,6 @@ function rebootneutron
     return $?
 }
 
-function qa_test
-{
-    local ghsc=github.com/SUSE-Cloud
-    mkdir -p ~/$ghsc/
-    pushd ~/$ghsc/
-    if [ -e "qa-openstack-cli" ] ; then
-        cd qa-openstack-cli/
-        git pull
-    else
-        git clone https://$ghsc/qa-openstack-cli.git
-    fi
-    popd
-    rsync -av ~/$ghsc/qa-openstack-cli root@$adminip:
-    onadmin qa_test
-    ret=$?
-
-    $scp -r root@$adminip:qa_test.logs/ $artifacts_dir/
-    return $ret
-}
-
 function crowbarbackup
 {
     safely onadmin crowbarbackup "$@"
@@ -1013,7 +993,6 @@ Steps:
     restorecloudfromsnapshot:
                     restore all nodes from snapshot
     devsetup:       installs the crowbar development environment in /opt/crowbar
-    qa_test:        run the qa test suite
     help:           usage of steps and environment variables
     steps:          usage of steps only
 
@@ -1348,7 +1327,7 @@ allcmds="$step_aliases _test_setuphost \
     prepareinstcrowbar bootstrapcrowbar instcrowbar instcrowbarfromgit setupnodes \
     setupcompute instnodes instcompute proposal testsetup rebootcrowbar \
     rebootcloud addupdaterepo runupdate testupdate \
-    crowbarbackup crowbarrestore shutdowncloud restartcloud qa_test help \
+    crowbarbackup crowbarrestore shutdowncloud restartcloud help \
     rebootneutron cloudupgrade \
     setuplonelynodes crowbar_register createadminsnapshot \
     lonelynode_nfs_server setupironicnodes\
